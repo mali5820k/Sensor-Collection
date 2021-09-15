@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <json-c/json.h>
+#include "json.h"
 
 int main(int argc, char **argv)
 {
