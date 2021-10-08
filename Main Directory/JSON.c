@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <strings.h>
 // Below two imports are used for checking if a directory exists for
 // the mkdir function.
 #include <sys/types.h>
@@ -12,18 +13,17 @@
 // a 4MB buffer should be enough to load JSON contents
 #define BUFFER 2*1024*1024
 
-
-extern struct json_object *parsed_json_file;
+struct json_object *parsed_json_file;
 
 char fileName[BUFFER];
 char outputFileName[BUFFER];
 
 
-int setup_json_module()
+int setup_json_module(char* _fileName, char* _outputFileName)
 {
         int error1, error2 = 0;
-        error1 = strcpy(fileName, "data.json");
-        error2 = strcpy(outputFileName, "outputData.json");
+        error1 = strcpy(fileName, _fileName);
+        error2 = strcpy(outputFileName, _outputFileName);
 
         if (error1 || error2)
                 return 1;
@@ -112,7 +112,7 @@ int write_to_json()
 
         FILE *file;
         file = fopen(outputFileName, "w+"); // Overwrite the entire contents of the file
-        char jsonWriteBuffer[BUFFER];
+        //char jsonWriteBuffer[BUFFER];
         fwrite(jsonWriteBuffer, BUFFER, 1, file);
         fclose(file);
        

@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"gps.h": "c",
-		"gscope.h": "c"
+		"gscope.h": "c",
+		"stdio.h": "c"
 	}
 }
