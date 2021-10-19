@@ -1,5 +1,4 @@
 import subprocess
-import socket
 
-print("Inside python file: ")
-subprocess.call(["gcc","GPS.c"])
+list_file = subprocess.run(["ls","-l"])
+print("The exit code was: %d" % list_file.returncode)
