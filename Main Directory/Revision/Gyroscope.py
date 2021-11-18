@@ -7,12 +7,6 @@ import machine
 #import IMU_SPI as IMU
 import IMU_I2C as IMU
 
-
-
-
-
-
-
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
 G_GAIN = 0.070  # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
@@ -24,16 +18,12 @@ gyroZangle = 0.0
 CFangleX = 0.0
 CFangleY = 0.0
 
-
-
 IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
 
 a = utime.ticks_us()
 
 while True:
-    
-        
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = IMU.readACCx()
     ACCy = IMU.readACCy()
@@ -88,7 +78,3 @@ while True:
 
     print(outputString)
 
-def main(self):
-	return
-
-if __name__ == "__main__": main()
