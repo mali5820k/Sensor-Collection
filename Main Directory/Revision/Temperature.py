@@ -205,17 +205,12 @@ class BMP388(object):
 
 
 
-def main(self):
-    if __name__ == '__main__':
-
-    import time
+def getTemperaturePressureAltitude():
  
-    print("BMP388 Test Program ...\n")
+    #print("BMP388 Test Program ...\n")
  
     bmp388 = BMP388()
  
-    while True:
-    time.sleep(0.5)
     temperature,pressure,altitude = bmp388.get_temperature_and_pressure_and_altitude()
     print(' Temperature = %.1f Pressure = %.2f  Altitude =%.2f '%(temperature/100.0,pressure/100.0,altitude/100.0))
 

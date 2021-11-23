@@ -193,7 +193,9 @@ if(IMU.BerryIMUversion == 99):
     sys.exit()
 IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
-def getGyroAccelMagno():
+
+while True:
+
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = IMU.readACCx()
     ACCy = IMU.readACCy()
@@ -213,7 +215,6 @@ def getGyroAccelMagno():
 
 
     ##Calculate loop Period(LP). How long between Gyro Reads
-    global a
     b = datetime.datetime.now() - a
     a = datetime.datetime.now()
     LP = b.microseconds/(1000000*1.0)
@@ -224,13 +225,6 @@ def getGyroAccelMagno():
     ###############################################
     #### Apply low pass filter ####
     ###############################################
-    global oldXMagRawValue
-    global oldYMagRawValue
-    global oldZMagRawValue
-    global oldXAccRawValue
-    global oldYAccRawValue
-    global oldZAccRawValue
-
     MAGx =  MAGx  * MAG_LPF_FACTOR + oldXMagRawValue*(1 - MAG_LPF_FACTOR);
     MAGy =  MAGy  * MAG_LPF_FACTOR + oldYMagRawValue*(1 - MAG_LPF_FACTOR);
     MAGz =  MAGz  * MAG_LPF_FACTOR + oldZMagRawValue*(1 - MAG_LPF_FACTOR);
@@ -314,10 +308,6 @@ def getGyroAccelMagno():
 
 
     #Calculate the angles from the gyro.
-    global gyroXangle
-    global gyroYangle
-    global gyroZangle
-
     gyroXangle+=rate_gyr_x*LP
     gyroYangle+=rate_gyr_y*LP
     gyroZangle+=rate_gyr_z*LP
@@ -337,9 +327,6 @@ def getGyroAccelMagno():
 
 
     #Complementary filter used to combine the accelerometer and gyro values.
-    global CFangleX
-    global CFangleY
-
     CFangleX=AA*(CFangleX+rate_gyr_x*LP) +(1 - AA) * AccXangle
     CFangleY=AA*(CFangleY+rate_gyr_y*LP) +(1 - AA) * AccYangle
 

@@ -14,7 +14,8 @@ def init_DHT_11():
     Humidity.setPin(22)
     pass
 
-
+# Don't really need to init much else for all other sensors
+# Remove inits that aren't needed.
 def init_Berry_gps():
     pass
 
