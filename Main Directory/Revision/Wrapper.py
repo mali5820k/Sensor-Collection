@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 import Humidity
 import CameraControl
 import GPS
@@ -7,9 +8,7 @@ import Temperature
 ##########################################################
 import json
 
-
-
-# Sensor Data buffers
+# Sensors Data buffer
 dataBuffer = {}
 
 #For sending GPS data to command and telemetry
@@ -22,22 +21,18 @@ def init_DHT_11():
     Humidity.setPin(22)
 
 
-# Don't really need to init much else for all other sensors
-# Remove inits that aren't needed.
 def init_Berry_gps():
     GPS.connectBus()
-
 
 def init_Berry_Accel_Gyro_Compass():
     Gyroscope.init_sensors()
 
-
 def init_Berry_temperature():
     pass
 
-
 def init_cam_ctrl():
     # Zero out camera
+    #CameraControl.setup() # Borked camera control
     pass
     
 
@@ -57,14 +52,16 @@ def get_humidity():
     global dataBuffer
     humidity = Humidity.get_humidity()
     dataBuffer["Humidity"] = humidity
+    #dataBuffer.update(humidity)
 
 
 def get_temperature_Altitude_Pressure():
     global dataBuffer
     readVal = Temperature.getTemperaturePressureAltitude()
-    dataBuffer["Temperature"] = readVal["Temperature"]
-    dataBuffer["Altitude"] = readVal["Altitude"]
-    dataBuffer["Pressure"] = readVal["Pressure"]
+    # dataBuffer["Temperature"] = readVal["Temperature"]
+    # dataBuffer["Altitude"] = readVal["Altitude"]
+    # dataBuffer["Pressure"] = readVal["Pressure"]
+    dataBuffer.update(readVal)
     pass
 
 
@@ -77,13 +74,15 @@ def get_gps_position():
 def get_gscope_Accel_KalmanFiltered():
     global dataBuffer
     gyroAccKalman = Gyroscope.getGyroAccelMagno()
-    dataBuffer["Gyroscope"] = gyroAccKalman["gryoscope"]
-    dataBuffer["Accelerometer"] = gyroAccKalman["accelerometer"]
-    dataBuffer["KalmanFiltered"] = gyroAccKalman["KalmanFiltered"]
+    # dataBuffer["Gyroscope"] = gyroAccKalman["gyroscope"]
+    # dataBuffer["Accelerometer"] = gyroAccKalman["accelerometer"]
+    # dataBuffer["KalmanFiltered"] = gyroAccKalman["KalmanFiltered"]
+    dataBuffer.update(gyroAccKalman)
 
 
 def capture_image():
-    CameraControl.camera_control()
+    #CameraControl.camera_control(dataBuffer)
+    # Camera Control is not functioning properly, need to use different approach
     CameraControl.camera_capture()
     pass
 
@@ -97,8 +96,10 @@ def main():
         get_temperature_Altitude_Pressure()
         get_gscope_Accel_KalmanFiltered()
         capture_image()
-
         print(dataBuffer)
 
 if __name__ == "__main__":
-	main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        GPIO.cleanup()

@@ -184,12 +184,6 @@ class BMP388(object):
 
     def get_temperature_and_pressure_and_altitude(self):
         """Returns pressure in Pa as double. Output value of "6386.2"equals 96386.2 Pa = 963.862 hPa."""
-        # global BMP388_REG_ADD_TEMP_XLSB
-        # global BMP388_REG_ADD_TEMP_LSB
-        # global BMP388_REG_ADD_TEMP_MSB
-        # global BMP388_REG_ADD_PRESS_XLSB
-        # global BMP388_REG_ADD_PRESS_LSB
-        # global BMP388_REG_ADD_PRESS_MSB
 
         xlsb = self._read_byte(BMP388_REG_ADD_TEMP_XLSB)
         lsb = self._read_byte(BMP388_REG_ADD_TEMP_LSB)
@@ -208,16 +202,16 @@ class BMP388(object):
         return (temperature, pressure, altitude)
 
 
-
-
-
 def getTemperaturePressureAltitude():
  
     #print("BMP388 Test Program ...\n")
  
     bmp388 = BMP388()
- 
+    time.sleep(1)
     temperature,pressure,altitude = bmp388.get_temperature_and_pressure_and_altitude()
     #print(' Temperature = %.1f Pressure = %.2f  Altitude =%.2f '%(temperature/100.0,pressure/100.0,altitude/100.0))
+    temperature = temperature /100.0
+    pressure = pressure/100.0
+    altitude = altitude/100.0
     return {"Temperature": temperature, "Altitude": altitude, "Pressure": pressure}
 

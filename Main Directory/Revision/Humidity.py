@@ -7,7 +7,7 @@ DHT_PIN = 22 # By default we should keep it to 22
 failCounter = 0
 
 def setPin(pin):
-	global DHT_PIN
+    global DHT_PIN
     DHT_PIN = pin
 
 # Should call this once every update cycle to store in wrapper.py
@@ -25,4 +25,4 @@ def get_humidity():
         if failCounter >= 5:
             print("Sensor Failure. Check wiring.")
         return -1
-    return humidity
+    return humidity #{"Humidity": humidity}
