@@ -6,14 +6,7 @@ from LSM6DSL import *
 from LIS3MDL import *
 import time
 
-
-
-
 BerryIMUversion = 99
-
-
-
-
 
 def detectIMU():
     #Detect which version of BerryIMU is connected using the 'who am i' register
@@ -66,17 +59,6 @@ def detectIMU():
             print("Found BerryIMUv3 (LSM6DSL and LIS3MDL)")
             BerryIMUversion = 3
     time.sleep(1)
-
-
-
-
-
-
-
-
-
-
-
 
 
 

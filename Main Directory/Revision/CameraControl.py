@@ -8,6 +8,7 @@ import os
 
 count = 0
 delay = 10 # in seconds
+reference = [0, 0]
 
 def camera_capture():
         global count
@@ -27,7 +28,8 @@ def camera_capture():
         os.system("~/Desktop/machineLearning/neuralNetwork -a FinalNetwork.txt {}".format(fileName))
         return
 
-def camera_control(rot1, rot2, reference):
+def camera_control(rot1, rot2):
+        global reference
 	# Simply rotate up or down based on 'upright' orientation
         # Same thing for left and right, if we're sideways, counter that rotation
 	return

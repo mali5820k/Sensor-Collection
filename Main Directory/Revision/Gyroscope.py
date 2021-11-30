@@ -41,12 +41,13 @@ MAG_MEDIANTABLESIZE = 9         # Median filter table size for magnetometer. Hig
 # Calibrating the compass isnt mandatory, however a calibrated
 # compass will result in a more accurate heading value.
 
-magXmin =  0
-magYmin =  0
-magZmin =  0
-magXmax =  0
-magYmax =  0
-magZmax =  0
+# These were all 0 by default
+magXmin =  -1977
+magYmin =  -2370
+magZmin =  417
+magXmax =  797
+magYmax =  267
+magZmax =  2660
 
 
 '''
@@ -168,32 +169,55 @@ oldZMagRawValue = 0
 oldXAccRawValue = 0
 oldYAccRawValue = 0
 oldZAccRawValue = 0
+a = None
 
-a = datetime.datetime.now()
+def init_sensors():
+    global a
+    a = datetime.datetime.now()
 
+    #Setup the tables for the mdeian filter. Fill them all with '1' so we dont get devide by zero error
+    global acc_medianTable1X
+    global acc_medianTable1Y
+    global acc_medianTable1Z
+    global acc_medianTable2X
+    global acc_medianTable2Y
+    global acc_medianTable2Z
+    global mag_medianTable1X
+    global mag_medianTable1Y
+    global mag_medianTable1Z
+    global mag_medianTable2X
+    global mag_medianTable2Y
+    global mag_medianTable2Z
+    global ACC_MEDIANTABLESIZE
+    global MAG_MEDIANTABLESIZE
 
+    acc_medianTable1X = [1] * ACC_MEDIANTABLESIZE
+    acc_medianTable1Y = [1] * ACC_MEDIANTABLESIZE
+    acc_medianTable1Z = [1] * ACC_MEDIANTABLESIZE
+    acc_medianTable2X = [1] * ACC_MEDIANTABLESIZE
+    acc_medianTable2Y = [1] * ACC_MEDIANTABLESIZE
+    acc_medianTable2Z = [1] * ACC_MEDIANTABLESIZE
+    mag_medianTable1X = [1] * MAG_MEDIANTABLESIZE
+    mag_medianTable1Y = [1] * MAG_MEDIANTABLESIZE
+    mag_medianTable1Z = [1] * MAG_MEDIANTABLESIZE
+    mag_medianTable2X = [1] * MAG_MEDIANTABLESIZE
+    mag_medianTable2Y = [1] * MAG_MEDIANTABLESIZE
+    mag_medianTable2Z = [1] * MAG_MEDIANTABLESIZE
 
-#Setup the tables for the mdeian filter. Fill them all with '1' so we dont get devide by zero error
-acc_medianTable1X = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable1Y = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable1Z = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable2X = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable2Y = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable2Z = [1] * ACC_MEDIANTABLESIZE
-mag_medianTable1X = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable1Y = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable1Z = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable2X = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable2Y = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable2Z = [1] * MAG_MEDIANTABLESIZE
-
-IMU.detectIMU()     #Detect if BerryIMU is connected.
-if(IMU.BerryIMUversion == 99):
-    print(" No BerryIMU found... exiting ")
-    sys.exit()
-IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
+    IMU.detectIMU()     #Detect if BerryIMU is connected.
+    if(IMU.BerryIMUversion == 99):
+        print(" No BerryIMU found... exiting ")
+        sys.exit()
+    IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
 def getGyroAccelMagno():
+    global magXmin
+    global magXmax
+    global magYmin
+    global magYmax
+    global magZmin
+    global magZmax
+
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = IMU.readACCx()
     ACCy = IMU.readACCy()
@@ -230,13 +254,29 @@ def getGyroAccelMagno():
     global oldXAccRawValue
     global oldYAccRawValue
     global oldZAccRawValue
+    global acc_medianTable1X
+    global acc_medianTable1Y
+    global acc_medianTable1Z
+    global acc_medianTable2X
+    global acc_medianTable2Y
+    global acc_medianTable2Z
+    global mag_medianTable1X
+    global mag_medianTable1Y
+    global mag_medianTable1Z
+    global mag_medianTable2X
+    global mag_medianTable2Y
+    global mag_medianTable2Z
+    global ACC_MEDIANTABLESIZE
+    global MAG_MEDIANTABLESIZE
+    global MAG_LPF_FACTOR
+    global ACC_LPF_FACTOR
 
-    MAGx =  MAGx  * MAG_LPF_FACTOR + oldXMagRawValue*(1 - MAG_LPF_FACTOR);
-    MAGy =  MAGy  * MAG_LPF_FACTOR + oldYMagRawValue*(1 - MAG_LPF_FACTOR);
-    MAGz =  MAGz  * MAG_LPF_FACTOR + oldZMagRawValue*(1 - MAG_LPF_FACTOR);
-    ACCx =  ACCx  * ACC_LPF_FACTOR + oldXAccRawValue*(1 - ACC_LPF_FACTOR);
-    ACCy =  ACCy  * ACC_LPF_FACTOR + oldYAccRawValue*(1 - ACC_LPF_FACTOR);
-    ACCz =  ACCz  * ACC_LPF_FACTOR + oldZAccRawValue*(1 - ACC_LPF_FACTOR);
+    MAGx =  MAGx  * MAG_LPF_FACTOR + oldXMagRawValue*(1 - MAG_LPF_FACTOR)
+    MAGy =  MAGy  * MAG_LPF_FACTOR + oldYMagRawValue*(1 - MAG_LPF_FACTOR)
+    MAGz =  MAGz  * MAG_LPF_FACTOR + oldZMagRawValue*(1 - MAG_LPF_FACTOR)
+    ACCx =  ACCx  * ACC_LPF_FACTOR + oldXAccRawValue*(1 - ACC_LPF_FACTOR)
+    ACCy =  ACCy  * ACC_LPF_FACTOR + oldYAccRawValue*(1 - ACC_LPF_FACTOR)
+    ACCz =  ACCz  * ACC_LPF_FACTOR + oldZAccRawValue*(1 - ACC_LPF_FACTOR)
 
     oldXMagRawValue = MAGx
     oldYMagRawValue = MAGy
@@ -270,9 +310,9 @@ def getGyroAccelMagno():
     acc_medianTable2Z.sort()
 
     # The middle value is the value we are interested in
-    ACCx = acc_medianTable2X[int(ACC_MEDIANTABLESIZE/2)];
-    ACCy = acc_medianTable2Y[int(ACC_MEDIANTABLESIZE/2)];
-    ACCz = acc_medianTable2Z[int(ACC_MEDIANTABLESIZE/2)];
+    ACCx = acc_medianTable2X[int(ACC_MEDIANTABLESIZE/2)]
+    ACCy = acc_medianTable2Y[int(ACC_MEDIANTABLESIZE/2)]
+    ACCz = acc_medianTable2Z[int(ACC_MEDIANTABLESIZE/2)]
 
 
 
@@ -301,12 +341,12 @@ def getGyroAccelMagno():
     mag_medianTable2Z.sort()
 
     # The middle value is the value we are interested in
-    MAGx = mag_medianTable2X[int(MAG_MEDIANTABLESIZE/2)];
-    MAGy = mag_medianTable2Y[int(MAG_MEDIANTABLESIZE/2)];
-    MAGz = mag_medianTable2Z[int(MAG_MEDIANTABLESIZE/2)];
+    MAGx = mag_medianTable2X[int(MAG_MEDIANTABLESIZE/2)]
+    MAGy = mag_medianTable2Y[int(MAG_MEDIANTABLESIZE/2)]
+    MAGz = mag_medianTable2Z[int(MAG_MEDIANTABLESIZE/2)]
 
 
-
+    global G_GAIN
     #Convert Gyro raw to degrees per second
     rate_gyr_x =  GYRx * G_GAIN
     rate_gyr_y =  GYRy * G_GAIN
@@ -323,6 +363,8 @@ def getGyroAccelMagno():
     gyroZangle+=rate_gyr_z*LP
 
     #Convert Accelerometer values to degrees
+    global RAD_TO_DEG
+    global M_PI
     AccXangle =  (math.atan2(ACCy,ACCz)*RAD_TO_DEG)
     AccYangle =  (math.atan2(ACCz,ACCx)+M_PI)*RAD_TO_DEG
 
@@ -339,6 +381,8 @@ def getGyroAccelMagno():
     #Complementary filter used to combine the accelerometer and gyro values.
     global CFangleX
     global CFangleY
+    global AA
+
 
     CFangleX=AA*(CFangleX+rate_gyr_x*LP) +(1 - AA) * AccXangle
     CFangleY=AA*(CFangleY+rate_gyr_y*LP) +(1 - AA) * AccYangle
@@ -383,10 +427,6 @@ def getGyroAccelMagno():
     else:                                                                #LSM9DS1
         magYcomp = MAGx*math.sin(roll)*math.sin(pitch)+MAGy*math.cos(roll)+MAGz*math.sin(roll)*math.cos(pitch)
 
-
-
-
-
     #Calculate tilt compensated heading
     tiltCompensatedHeading = 180 * math.atan2(magYcomp,magXcomp)/M_PI
 
@@ -395,25 +435,27 @@ def getGyroAccelMagno():
 
 
     ##################### END Tilt Compensation ########################
+    # Dictionary of values to return:
+    return {"gyroscope": [gyroXangle, gyroYangle, gyroZangle], "accelerometer": [AccXangle, AccYangle], "KalmanFiltered": [kalmanX, kalmanY]}
 
+#     if 1:                       #Change to '0' to stop showing the angles from the accelerometer
+#         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
 
-    if 1:                       #Change to '0' to stop showing the angles from the accelerometer
-        outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
+#     if 1:                       #Change to '0' to stop  showing the angles from the gyro
+#         outputString +="\t# GRYX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
 
-    if 1:                       #Change to '0' to stop  showing the angles from the gyro
-        outputString +="\t# GRYX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
+#     if 1:                       #Change to '0' to stop  showing the angles from the complementary filter
+#         outputString +="\t#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
 
-    if 1:                       #Change to '0' to stop  showing the angles from the complementary filter
-        outputString +="\t#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
+#     if 1:                       #Change to '0' to stop  showing the heading
+#         outputString +="\t# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
 
-    if 1:                       #Change to '0' to stop  showing the heading
-        outputString +="\t# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
+#     if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
+#         outputString +="# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX,kalmanY)
 
-    if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
-        outputString +="# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX,kalmanY)
+#     print(outputString)
 
-    print(outputString)
+#     #slow program down a bit, makes the output more readable
+#     time.sleep(0.03)
 
-    #slow program down a bit, makes the output more readable
-    time.sleep(0.03)
 
