@@ -1,7 +1,3 @@
 {
-	"files.associations": {
-		"gps.h": "c",
-		"gscope.h": "c",
-		"stdio.h": "c"
-	}
+        "python.formatting.provider": "black"
 }
