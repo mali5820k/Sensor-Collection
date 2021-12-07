@@ -73,14 +73,14 @@ class BMP388(object):
         # Load calibration values.
 
         if self._read_byte(BMP388_REG_ADD_WIA) == BMP388_REG_VAL_WIA:
-            print("Pressure sersor is BMP388!\r\n")
+            #print("Pressure sersor is BMP388!\r\n")
             u8RegData = self._read_byte(BMP388_REG_ADD_STATUS)
             if u8RegData & BMP388_REG_VAL_CMD_RDY:
                 self._write_byte(BMP388_REG_ADD_CMD,
                                  BMP388_REG_VAL_SOFT_RESET)
                 time.sleep(0.01)
-        else:
-            print ("Pressure sersor NULL!\r\n")
+        #else:
+            #print ("Pressure sersor NULL!\r\n")
         self._write_byte(BMP388_REG_ADD_PWR_CTRL,
                          BMP388_REG_VAL_PRESS_EN
                          | BMP388_REG_VAL_TEMP_EN
@@ -111,7 +111,7 @@ class BMP388(object):
         self._bus.write_byte_data(self._address, cmd, val)
 
     def _load_calibration(self):
-        print ("_load_calibration\r\n")
+        #print ("_load_calibration\r\n")
         self.T1 = self._read_u16(BMP388_REG_ADD_T1_LSB)
         self.T2 = self._read_u16(BMP388_REG_ADD_T2_LSB)
         self.T3 = self._read_s8(BMP388_REG_ADD_T3)

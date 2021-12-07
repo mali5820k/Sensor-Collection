@@ -25,7 +25,8 @@ def camera_capture():
     os.system("raspistill -t {} -rot 180 -o {} -w 720 -h 480".format(delay, fileName))
 
     # Running the command that Machine learning needs:
-    os.system("~/Desktop/machineLearning/neuralNetwork -a FinalNetwork.txt {}".format(fileName))
+    # This was ~/Desktop/machineLearning/neuralNetwork -a finalNetwork.txt {}
+    os.system("~/Desktop/machineLearning/neuralNetwork -a finalNetwork.txt {}".format(fileName))
     return
 
 # Using this source for servo control:

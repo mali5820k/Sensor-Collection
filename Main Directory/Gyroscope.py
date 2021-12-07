@@ -436,7 +436,8 @@ def getGyroAccelMagno():
 
     ##################### END Tilt Compensation ########################
     # Dictionary of values to return:
-    return {"gyroscope": [gyroXangle, gyroYangle, gyroZangle], "accelerometer": [AccXangle, AccYangle], "KalmanFiltered": [kalmanX, kalmanY]}
+    #return {"gyroscope": [gyroXangle, gyroYangle, gyroZangle], "accelerometer": [AccXangle, AccYangle], "KalmanFiltered": [kalmanX, kalmanY]}
+    return {"gyroscope": [gyroXangle, gyroYangle, gyroZangle], "accelerometer": [ACCx, ACCy, ACCz], "KalmanFiltered": [kalmanX, kalmanY], "Compass" : [MAGx, MAGy, MAGz]}
 
 #     if 1:                       #Change to '0' to stop showing the angles from the accelerometer
 #         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)

@@ -3,7 +3,7 @@ import Adafruit_DHT # This library works where-as the adeept one doesn't on the 
 import time
 
 DHT_SENSOR = Adafruit_DHT.DHT11
-DHT_PIN = 22 # By default we should keep it to 22
+DHT_PIN = 27 # By default 22
 failCounter = 0
 
 def setPin(pin):
