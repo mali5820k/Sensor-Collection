@@ -36,7 +36,7 @@ def parseResponse(gpsLine):
                     for ch in gpsStr[1:]: # Remove the $ and do a manual checksum on the rest of the NMEA sentence
                             chkVal ^= ord(ch)
                     if (chkVal == int(chkSum, 16)): # Compare the calculated checksum with the one in the NMEA sentence
-                            print(gpsChars)
+                            #print(gpsChars)
                             gpsReadVal = gpsChars
                             
         
@@ -67,6 +67,7 @@ def readGPS():
                 response.append(c)
  
         parseResponse(response)
+
         return {"GPS" : gpsReadVal}
  
     except IOError:

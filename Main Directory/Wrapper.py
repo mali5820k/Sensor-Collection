@@ -87,8 +87,17 @@ def get_temperature_Altitude_Pressure():
 # Do not call this function, this will hang the program
 def get_gps_position():
     global dataBuffer
-    readVal = GPS.readGPS()
-    dataBuffer.update(readVal)
+    counter = 0
+    gpsPolls = []
+    while counter < 12:
+        readVal = GPS.readGPS()
+        if "No_GPS_signal, No_GPS_signal, No_GPS_signal" not in readVal.values():
+            #gpsPolls.append(GPS.readGPS())
+            gpsPolls.append(readVal)
+            time.sleep(GPS.gpsReadInterval)
+            counter += 1
+    readVal1 = {"GPS NMEA Sentences": gpsPolls}
+    dataBuffer.update(readVal1)
     pass
 
 

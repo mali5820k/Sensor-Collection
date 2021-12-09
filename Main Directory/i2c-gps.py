@@ -62,7 +62,11 @@ def readGPS():
         print(e)
  
 connectBus()
- 
+
+counter = 0
+
 while True:
     readGPS()
+    print(counter)
+    counter += 1
     time.sleep(gpsReadInterval)
