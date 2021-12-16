@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-#import sys # Comment this line out for debugging to purposefully cause an error
+import sys # Comment this line out for debugging to purposefully cause an error
 import Humidity
 import CameraControl
 import GPS
@@ -38,7 +38,6 @@ def sendData(input: str):
 def init_DHT_11():
     Humidity.setPin(27)
 
-
 def init_Berry_gps():
     GPS.connectBus()
     GPS.firstRun = False
@@ -49,12 +48,11 @@ def init_Berry_Accel_Gyro_Compass():
 def init_Berry_temperature():
     pass
 
-def init_cam_ctrl():
+#def init_cam_ctrl():
     # Zero out camera
-    CameraControl.setup() # Borked camera control
-    pass
+    #CameraControl.setup() # Borked camera control
+#    pass
     
-
 # These two inits are special and can exit the system if
 # any of the above inits causes an error.
 
@@ -63,7 +61,7 @@ def init_all_sensors():
     init_DHT_11()
     init_Berry_gps()
     init_Berry_temperature()
-    init_cam_ctrl()
+    #init_cam_ctrl()
 
 # Functions to get parameters for every sensor's data
 # Return a -1 if not successful
@@ -83,8 +81,6 @@ def get_temperature_Altitude_Pressure():
     dataBuffer.update(readVal)
     pass
 
-
-# Do not call this function, this will hang the program
 def get_gps_position():
     global dataBuffer
     counter = 0
@@ -111,7 +107,7 @@ def get_gscope_Accel_KalmanFiltered():
 
 
 def capture_image():
-    CameraControl.camera_control(dataBuffer)
+    #CameraControl.camera_control(dataBuffer)
     # Camera Control is not functioning properly, need to use different approach
     CameraControl.camera_capture()
     pass
